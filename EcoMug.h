@@ -31,6 +31,7 @@
 #include <iostream>
 #include <initializer_list>
 #include <sstream>  
+#include <bit>
 
 #define ECOMUG_VERSION "2.1"
 
@@ -188,12 +189,7 @@ public:
   };
 
   double to_double(std::uint64_t x) {
-    union U {
-      std::uint64_t i;
-      double d;
-    };
-    U u = { UINT64_C(0x3FF) << 52 | x >> 12 };
-    return u.d - 1.0;
+    return std::bit_cast<double>(UINT64_C(0x3FF) << 52 | x >> 12) - 1.0;
   };
 
   std::uint64_t s[2];
